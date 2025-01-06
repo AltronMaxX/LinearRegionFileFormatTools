@@ -5,7 +5,7 @@ import zlib
 import nbtlib
 import random
 import os
-from mclinear import open_region_linear, write_region_linear
+from tools.mclinear import open_region_linear, write_region_linear
 
 def move_region(source_filename, destination_filename):
     dest_region_coords = destination_filename.split("/")[-1].split(".")

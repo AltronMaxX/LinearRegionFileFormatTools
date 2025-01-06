@@ -34,7 +34,7 @@ import zlib
 
 from fuse import FUSE, FuseOSError, Operations, fuse_get_context
 from collections import OrderedDict
-from mclinear import open_region_linear, write_region_anvil_to_bytes
+from tools.mclinear import open_region_linear, write_region_anvil_to_bytes
 
 MCA_FILES_SIZE = 20 * 1024 * 1024
 

@@ -105,6 +105,7 @@ def open_region_linear(file_path):
     return Region(chunks, region_x, region_z, mtime, timestamps)
 
 def quickly_verify_linear(file_path):
+    SUPPORTED_VERSION = [1, 2, 3]
     try:
         with open(file_path, 'rb') as f:
             raw_region = f.read()

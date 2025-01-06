@@ -6,7 +6,7 @@ import os.path
 import argparse
 import zlib
 from glob import glob
-from mclinear import open_region_linear, write_region_anvil, open_region_anvil, write_region_linear
+from mclinear import open_region_linear, write_region_anvil, open_region_anvil, write_region_linear, open_region_linear_v2
 from multiprocessing import Pool, cpu_count, Manager
 from tqdm import tqdm
 
@@ -41,6 +41,9 @@ def convert_file(args):
         if conversion_mode == "linear2mca":
             region = open_region_linear(source_file)
             write_region_anvil(destination_file, region, compression_level=zlib.Z_DEFAULT_COMPRESSION)
+        elif conversion_mode == "linearv2linearv1":
+            region = open_region_linear_v2(source_file)
+            write_region_linear(destination_file, region, compression_level=compression_level)
         else:
             region = open_region_anvil(source_file)
             write_region_linear(destination_file, region, compression_level=compression_level)
@@ -57,7 +60,8 @@ def convert_file(args):
 
 if __name__ == "__main__":
     parser = CustomArgumentParser(description="Convert region files between Anvil and Linear format")
-    parser.add_argument("conversion_mode", choices=["mca2linear", "linear2mca"], help="Conversion direction: mca2linear or linear2mca")
+    parser.add_argument("conversion_mode", choices=["mca2linear", "linear2mca", "linearv2linearv1"], 
+                        help="Conversion direction: mca2linear or linear2mca or linearv2-linearv1")
     parser.add_argument("-t", "--threads", type=int, default=cpu_count(), help="Number of threads (default: number of CPUs)")
     parser.add_argument("-c", "--compression-level", type=int, default=6, help="Zstd compression level (default: 6)")
     parser.add_argument("-l", "--log", action='store_true', help="Show a log of files instead of a progress bar")
@@ -72,7 +76,7 @@ if __name__ == "__main__":
     destination_dir = args.destination_dir
     log = args.log
 
-    file_ext = "*.linear" if args.conversion_mode == "linear2mca" else "*.mca"
+    file_ext = "*.linear" if args.conversion_mode == "linear2mca" or args.conversion_mode == "linearv2linearv1" else "*.mca"
     file_list = glob(os.path.join(source_dir, file_ext))
     print("Found", len(file_list), "region files to convert")
 

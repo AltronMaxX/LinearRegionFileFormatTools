@@ -1,5 +1,5 @@
 import unittest
-import mclinear
+import tools.mclinear as mclinear
 import tempfile
 import os
 import shutil
